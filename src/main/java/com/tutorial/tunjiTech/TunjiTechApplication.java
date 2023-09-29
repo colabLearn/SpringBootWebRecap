@@ -5,6 +5,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -12,20 +13,31 @@ import java.util.Objects;
 @RestController
 public class TunjiTechApplication {
 
+	//Representing out db for now
+	private static List<Customer> customers;
+	static{
+		customers = new ArrayList<>();
+		Customer cust1 = new Customer(1, "Oba", "oba@gmail.com", 14);
+		Customer cust2 = new Customer(2, "Semi", "semi@yahoo.com", 11);
+		customers.add(cust1);
+		customers.add(cust2);
+	}
+
 	public static void main(String[] args) {
 
+		System.out.println(customers);
 		SpringApplication.run(TunjiTechApplication.class, args);
 	}
-	class customer{
+	static class Customer{
 		private Integer id;
 		private String name;
 		private String email;
 		private Integer age;
 
-		public customer() {
+		public Customer() {
 		}
 
-		public customer(Integer id, String name, String email, Integer age) {
+		public Customer(Integer id, String name, String email, Integer age) {
 			this.id = id;
 			this.name = name;
 			this.email = email;
@@ -68,7 +80,7 @@ public class TunjiTechApplication {
 		public boolean equals(Object o) {
 			if (this == o) return true;
 			if (o == null || getClass() != o.getClass()) return false;
-			customer customer = (customer) o;
+			Customer customer = (Customer) o;
 			return Objects.equals(id, customer.id) && Objects.equals(name, customer.name) && Objects.equals(email, customer.email) && Objects.equals(age, customer.age);
 		}
 
@@ -79,13 +91,12 @@ public class TunjiTechApplication {
 
 		@Override
 		public String toString() {
-			return "customer{" +
+			return "Customer{" +
 					"id=" + id +
 					", name='" + name + '\'' +
 					", email='" + email + '\'' +
 					", age=" + age +
 					'}';
 		}
-
 	}
 }
