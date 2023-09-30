@@ -1,7 +1,5 @@
 package com.tutorial.tunjiTech.customer;
 
-import com.tutorial.tunjiTech.exception.ResourceNotFound;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -20,8 +18,7 @@ public class CustomerService {
     public Customer getCustomer(Integer id){
         return customerDAO.selectCustomerByID(id)
                 .orElseThrow(
-                () -> new ResourceNotFound(
-                        "Customer with id %s not found".formatted(id)
-                ));
+                () -> new IllegalArgumentException(
+                        "Customer with id %s not found".formatted(id)));
     }
 }
