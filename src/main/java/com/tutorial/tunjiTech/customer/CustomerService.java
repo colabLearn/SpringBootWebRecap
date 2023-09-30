@@ -25,15 +25,13 @@ public class CustomerService {
                         "Customer with id %s not found".formatted(id)));
     }
 
-    public void deleteCustomer(Integer id){
-       if(customerDAO.existsPersonWithId(id)){
-           customerDAO.deleteCustomerByID(id);
-       }else{
+    public void deleteCustomerById(Integer id){
+       if(!customerDAO.existsPersonWithId(id)){
            throw new ResourceNotFoundException(
              "Customer with id does not exist"
            );
        }
-
+        customerDAO.deleteCustomerByID(id);
     }
 
     public void addCustomer(CustomerRegistrationRequest customerRegistrationRequest){

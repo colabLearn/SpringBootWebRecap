@@ -28,9 +28,9 @@ public class CustomerController {
             @RequestBody  CustomerRegistrationRequest request){
         customerService.addCustomer(request);
     }
-    @PostMapping("/delete/{id}")
+    @DeleteMapping("{id}")
     public void deleteCustomer(@PathVariable("id") Integer id){
-        customerService.deleteCustomer(id);
+        customerService.deleteCustomerById(id);
     }
 
 }
