@@ -1,5 +1,7 @@
 package com.tutorial.tunjiTech.customer;
 
+import com.tutorial.tunjiTech.exception.DuplicateResourceException;
+import com.tutorial.tunjiTech.exception.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
@@ -22,4 +24,40 @@ public class CustomerService {
                 () -> new IllegalArgumentException(
                         "Customer with id %s not found".formatted(id)));
     }
+
+    public void deleteCustomer(Integer id){
+       if(customerDAO.existsPersonWithId(id)){
+           customerDAO.deleteCustomerByID(id);
+       }else{
+           throw new ResourceNotFoundException(
+             "Customer with id does not exist"
+           );
+       }
+
+    }
+
+    public void addCustomer(CustomerRegistrationRequest customerRegistrationRequest){
+
+        //Check if email exist
+        String email = customerRegistrationRequest.email();
+        if(customerDAO.existsPersonWithEmail(email)){
+
+            throw new DuplicateResourceException(
+                    "email already taken"
+            );
+
+        }
+
+        //Otherwise add the customer
+        Customer customer = new Customer(
+                customerRegistrationRequest.name(),
+                customerRegistrationRequest.email(),
+                customerRegistrationRequest.age()
+        );
+        customerDAO.insertCustomer(customer);
+
+    }
+
+
+
 }
