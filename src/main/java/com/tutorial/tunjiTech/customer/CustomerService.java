@@ -1,6 +1,7 @@
 package com.tutorial.tunjiTech.customer;
 
 import com.tutorial.tunjiTech.exception.DuplicateResourceException;
+import com.tutorial.tunjiTech.exception.RequestValidationException;
 import com.tutorial.tunjiTech.exception.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
@@ -57,5 +58,39 @@ public class CustomerService {
     }
 
 
+    public void updateCustomer(Integer customerId,
+                               CustomerUpdateRequest updateRequest) {
+        Customer customer = getCustomer(customerId);
 
+        boolean changes = false;
+
+        if(updateRequest.name() !=null
+                && !updateRequest.name().equals(customer.getName()))
+        {
+            customer.setName(updateRequest.name());
+            changes=true;
+        }
+        if(updateRequest.email() !=null
+                && !updateRequest.email().equals(customer.getEmail()))
+        {
+            if(customerDAO.existsPersonWithEmail(updateRequest.email())){
+                throw new DuplicateResourceException(
+                  "email already taken"
+                );
+            }
+            customer.setEmail(updateRequest.email());
+            changes=true;
+        }
+        if(updateRequest.age() !=null
+                && !updateRequest.age().equals(customer.getAge()))
+        {
+            customer.setAge(updateRequest.age());
+            changes=true;
+        }
+        if(!changes){
+           throw new RequestValidationException("no data changes found");
+        }
+
+        customerDAO.updateCustomer(customer);
+    }
 }
